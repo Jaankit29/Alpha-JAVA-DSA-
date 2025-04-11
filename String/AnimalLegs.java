@@ -9,8 +9,8 @@ public class AnimalLegs {
          
         int FL= (L-2*N)/2;
         int TL=N-FL;
-        System.out.println(TL);
-        System.out.println(FL);
+        System.out.println("Two legs animal: "+TL);
+        System.out.println("four legs animal: "+FL);
        
     }
 }

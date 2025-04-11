@@ -16,3 +16,4 @@ public class CarRace {
     }
     
 }
+//  S=D/T

@@ -1,0 +1,319 @@
+⭕️Types of errors
+    1. Syntax error
+    2. Logical error
+    3. Runtime error
+
+Program will crash during run time errors
+
+    int[] n = {10, 5, 30,40};
+    tnt[] d = {1, 2, O, 4};
+    for (int i= O; i< n.length; i++) {
+        print(n/d);
+        }
+    10/1=1
+    5/2= 2
+    30/0= Error
+    Program will run except some cases.
+
+⭕️Exception:
+Exception is an event that disrupts the normal flow of the program. It is an object which is thrown at runtime.
+
+⭕️Exception Handling:
+The Exception Handling is a way to handle the runtime errors so that the normal flow of the
+application can be maintained.
+
+    try{
+    a / b;
+    }
+    catch (ArithmeticException e){ //  e is an object which is thrown at runtime.
+    print(e) ;
+    }
+
+    output:
+    10/1=1
+    5/2= 2
+    java.lang.ArithmeticException: / by zero
+    40/4= 10
+
+
+🔴*Exception Hierarchy:-
+
+    java.lang.Object
+        |----java.lang.Throwable
+
+    All exceptions are derived from the Throwable class.
+
+    java.lang.Throwable
+            |----java.lang.Error
+            |----java.lang.Exception
+
+    Throwable
+    ├── Error (e.g., StackOverflowError, OutOfMemoryError)
+    └── Exception
+        ├── Checked Exceptions (e.g., IOException, SQLException)
+        └── Unchecked Exceptions (RuntimeException and its subclasses, e.g., NullPointerException, ArithmeticException)
+
+🟡Branch 1: java.lang.Error
+Represents serious problems that applications should not try to catch.
+Examples:
+🔸VirtualMachineError: Related to the JVM.
+🔸OutOfMemoryError: Indicates insufficient memory.
+🔸StackOverflowError: Occurs due to excessive recursion.
+🔸NoClassDefFoundError: A required class cannot be found at runtime.
+
+🟡Branch 2: java.lang.Exception
+Represents conditions that applications might want to catch.
+Divided into:
+    1) Checked Exceptions:-Must be declared using throws or handled in try-catch.
+        Examples:
+        🔸IOException
+        🔸SQLException
+        🔸FileNotFoundException
+
+    2) Unchecked Exceptions (java.lang.RuntimeException):-Do not require explicit handling.
+        Examples:
+        🔸ArithmeticException: Divide by zero.
+        🔸NullPointerException: Accessing a null reference.
+        🔸IndexOutOfBoundsException: Array or list index out of range.
+        🔸IllegalArgumentException: Invalid arguments passed to a method.
+
+
+🔴Try, Catch, Finally, Throw, Throws
+    1) try and catch:-Used to handle exceptions.
+        The "try" block contains the code that might throw an exception.
+        The "catch" block handles specific exceptions.
+        Example:-
+        public class TryCatchExample {
+            public static void main(String[] args) {
+                try {
+                    int result = 10 / 0; // ArithmeticException
+                } catch (ArithmeticException e) {
+                    System.out.println("Cannot divide by zero: " + e.getMessage());
+                }
+            }
+        }
+
+    2). finally:-A block that always executes after try or catch.
+    Typically used to release resources (e.g., file streams, database connections).
+    Example:
+    public class FinallyExample {
+        public static void main(String[] args) {
+            try {
+                int result = 10 / 2;
+                System.out.println(result);
+            } finally {
+                System.out.println("Finally block executed");
+            }
+        }
+    }
+
+    Example:
+    public static int divide(int a, int b)
+    try {
+    return a / b; }
+    catch (Exception e) {
+    return -1; }
+    finally {
+    System.out.print("Bye); }
+
+    3). throw:-Used to explicitly throw an exception.
+    Can throw both checked and unchecked exceptions.
+    Example:
+    public class ThrowExample {
+        public static void main(String[] args) {
+            throw new IllegalArgumentException("Invalid argument provided");
+        }
+    }
+    4). throws:-Used to declare exceptions a method might throw.
+    Mandatory for checked exceptions unless handled inside the method.
+    Example:
+    public class ThrowsExample {
+        public static void main(String[] args) throws InterruptedException {
+            Thread.sleep(1000); // Throws InterruptedException
+        }
+    }
+
+🟡 Try-with-Resources
+    Introduced in Java 7.
+    Ensures automatic closing of resources that implement the AutoCloseable interface.
+    Eliminates the need for explicitly closing resources in the "finally" block.
+
+    Example:
+    import java.io.BufferedReader;
+    import java.io.FileReader;
+    import java.io.IOException;
+    public class TryWithResourcesExample {
+        public static void main(String[] args) {
+            try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+                System.out.println(br.readLine());
+            } catch (IOException e) {
+                System.out.println("Error reading file: " + e.getMessage());
+            }
+        }
+    }
+
+🟡 Custom Exceptions
+    User-defined exceptions by extending the Exception or RuntimeException class.
+    Example:
+    class InvalidAgeException extends Exception {
+        public InvalidAgeException(String message) {
+            super(message);
+        }
+    }
+
+    public class CustomExceptionExample {
+        public static void main(String[] args) {
+            try {
+                validateAge(15);
+            } catch (InvalidAgeException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        public static void validateAge(int age) throws InvalidAgeException {
+            if (age < 18) {
+                throw new InvalidAgeException("Age must be 18 or above");
+            }
+            System.out.println("Valid age");
+        }
+    }
+
+🔴Important Points
+    1)Exception Propagation:
+    Exceptions propagate up the call stack if not handled.
+    Checked exceptions must be either handled or declared using throws.
+
+    2)Multiple Catch Blocks:
+    Used to handle different exceptions separately.
+    Catch blocks should be ordered from most specific to least specific.
+
+    try {
+        // Some code
+    } catch (ArithmeticException e) {
+        // Specific exception
+    } catch (Exception e) {
+        // General exception
+    }
+
+    3)Multicatch (Java 7):
+    A single catch block can handle multiple exceptions.
+    java
+    Copy code
+    try {
+        int[] arr = new int[5];
+        arr[10] = 50;
+    } catch (ArithmeticException | ArrayIndexOutOfBoundsException e) {
+        System.out.println("Exception: " + e.getMessage());
+    }
+
+    4)Throwing Exceptions in Constructors:
+    Constructors can also throw exceptions using throws.
+
+    5)Suppressed Exceptions (Java 7):
+    Exceptions thrown in the try block suppress exceptions from the "finally" block.
+    Throwable provides a "getSuppressed()" method to access them.
+
+    6)Best Practices:
+    Handle exceptions gracefully to provide meaningful error messages to users.
+    Avoid catching generic Exception unless necessary.
+    Always close resources (prefer try-with-resources).
+    Log exceptions for debugging.
+
+
+
+🔴Compile-Time Error vs Runtime Error in Java
+    Errors in Java are broadly classified into Compile-Time Errors and Runtime Errors based on when they occur.
+
+    🟡1. Compile-Time Errors
+    Definition: Errors detected by the compiler before the program runs.
+
+    Causes:
+
+    Syntax errors
+    Incorrect method or variable usage
+    Type mismatches
+    Missing imports or incorrect package names
+    Examples:
+
+    🔸a) Syntax Error java
+        public class CompileErrorExample {
+            public static void main(String[] args) {
+                System.out.println("Hello World" // Missing closing parenthesis
+            }
+        }
+        ❌ Error: ';' expected
+
+    🔸b) Type Mismatch Error
+        public class CompileErrorExample {
+            public static void main(String[] args) {
+                int num = "Hello"; // Cannot assign String to int
+            }
+        }
+        ❌ Error: incompatible types: String cannot be converted to int
+
+    🔸c) Missing Import
+        public class CompileErrorExample {
+            public static void main(String[] args) {
+                List<Integer> list = new ArrayList<>(); // Missing import for java.util.List and java.util.ArrayList
+            }
+        }
+        ❌ Error: cannot find symbol 'List'
+
+    🟡2. Runtime Errors
+    Definition: Errors that occur while the program is running.
+
+    Causes:
+    Invalid operations (e.g., divide by zero)
+    Accessing invalid memory (e.g., null references, array out of bounds)
+    External failures (e.g., file not found, database connection issues)
+    Examples:
+
+    🔸a) ArithmeticException (Divide by Zero)
+        public class RuntimeErrorExample {
+            public static void main(String[] args) {
+                int result = 10 / 0; // Division by zero
+                System.out.println(result);
+            }
+        }
+        ❌ Error: java.lang.ArithmeticException: / by zero
+
+    🔸b) NullPointerException
+        public class RuntimeErrorExample {
+            public static void main(String[] args) {
+                String str = null;
+                System.out.println(str.length()); // Accessing a method on a null object
+            }
+        }
+        ❌ Error: java.lang.NullPointerException
+
+    🔸c) ArrayIndexOutOfBoundsException
+        public class RuntimeErrorExample {
+            public static void main(String[] args) {
+                int[] arr = new int[3];
+                System.out.println(arr[5]); // Accessing index out of bounds
+            }
+        }
+        ❌ Error: java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 3
+
+    🟡Key Differences
+        Feature	Compile-Time Error	Runtime Error
+        When it Occurs	During compilation (before execution)	While the program is running
+        Detected By	Java Compiler (Javac)	Java Virtual Machine (JVM)
+        Type of Error	Syntax, Type mismatch, Missing imports	Null pointer, Divide by zero, Array index out of bounds
+        Fixing Approach	Must be resolved before compilation succeeds	Can be handled using try-catch or proper logic
+        Examples	int a = "Hello"; (type mismatch), missing semicolon	10 / 0 (division by zero), null.length()
+        Handling Runtime Errors Using Try-Catch
+        java
+        Copy
+        Edit
+        public class ExceptionHandling {
+            public static void main(String[] args) {
+                try {
+                    int result = 10 / 0; // This will cause an exception
+                } catch (ArithmeticException e) {
+                    System.out.println("Cannot divide by zero: " + e.getMessage());
+                }
+            }
+        }
+        ✅ Output:
+        Cannot divide by zero: / by zero

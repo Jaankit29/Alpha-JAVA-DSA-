@@ -1,0 +1,208 @@
+/*The CPU, often referred to as the brain of the computer, is responsible for executing
+instructions from programs. It performs basic arithmetic, logic, control, and input/output
+operations specified by the instructions.
+
+A core is an individual processing unit within a CPU. Modern CPUs can have multiple cores,
+allowing them to perform multiple tasks simultaneously.
+
+A quad-core processor has four cores, allowing it to perform four tasks simultaneously. For instance, one core
+could handle your web browser, another your music player, another a download manager, and another a
+background system update.
+
+A program is a set of instructions written in a programming language that tells the computer
+how to perform a specific task Microsoft Word is a program that allows users to
+create and edit documents.
+
+A process is an instance of a program that is being executed. When a program runs, the
+operating system creates a process to manage its execution.
+When we open Microsoft Word, it becomes a process in the operating system.
+
+A thread is the smallest unit of execution within a process. A process can have multiple threads, which
+share the same resources but can run independently.
+
+A web browser like Google Chrome might use multiple threads for different tabs, with each tab running as a
+separate thread.
+
+Multitasking allows an operating system to run multiple processes simultaneously On single-core CPUs, this is done through time-
+sharing, rapidly switching between tasks. On multi-core CPUs, true parallel execution occurs, with tasks distributed across cores. The
+OS scheduler balances the load, ensuring efficient and responsive system performance.
+
+Multitasking utilizes the capabilities of a CPU and its cores. When an operating system performs multitasking,
+it can assign different tasks to different cores. This is more efficient than assigning all tasks to a single core.
+
+Multithreading refers to the ability to execute multiple threads within a single process concurrently.
+
+A web browser can use multithreading by having separate threads for rendering the page, running JavaScript, and
+managing user inputs. This makes the browser more responsive and efficient.
+
+Multithreading enhances the efficiency of multitasking by breaking down individual tasks into smaller sub-tasks or
+threads. These threads can be processed simultaneously, making better use of the CPU's capabilities.
+
+In a single-core system:
+Both threads and processes are managed by the OS scheduler through time slicing and context switching to
+create the illusion of simultaneous execution.
+
+In a multi-core system:
+Both threads and processes can run in true parallel on different cores, with the OS scheduler distributing tasks
+across the cores to optimize performance.
+
+Time Slicing
+• Definition: Time slicing divides CPU time into small intervals called time slices or quanta.
+• Function: The OS scheduler allocates these time slices to different processes and threads, ensuring each gets a fair share of CPU time.
+• Purpose: This prevents any single process or thread from monopolizing the CPU, improving responsiveness and enablin concurrent execution.
+
+Context Switching
+• Definition: Context switching is the process of saving the state of acurrently running process or thread and loading the state of the next
+one to be executed.
+• Function: When a process or thread's time slice expires, the OS scheduler performs a context switch to move the CPU's focus to
+another process or thread.
+
+***************************************************************************************************************
+In Java, multithreading is the concurrent execution of two or more threads to maximize the utilization of the
+CPU. Java's multithreading capabilities are part of the java.lang package, making it easy to implement concurrent execution.
+
+In a single-core environment, Java's multithreading is managed by the JVM and the OS, which switch between
+threads to give the illusion of concurrency.
+The threads share the single core, and time-slicing is used to manage thread execution.
+
+In a multi-core environment, Java's multithreading can takefull advantage of the available cores.
+The JVM can distribute threads across multiple cores, allowing true parallel execution of threads.
+
+**
+A thread is a lightweight process, the smallest unit ofprocessing. Java supports multithreading through its
+java.lang.Thread class and the java.lang.Runnable interface.
+
+**
+When a Java program starts, one thread begins running immediately, which is called the "main" thread. This thread is
+responsible for executing the main method of a program.
+*/
+
+Advantages of Multithreading:-
+Efficient CPU Utilization: Multithreading keeps the CPU busy by executing multiple threads.
+Faster Execution: Tasks can be divided among threads for parallel execution.
+Better User Experience: Applications remain responsive even when performing heavy tasks in the background.
+Simplified Design: Makes it easier to write asynchronous and real-time systems.
+
+Lifecycle of a Thread
+Threads in Java have a specific lifecycle defined by their state:
+
+New: When a thread is created but not started.
+Code: Thread t = new Thread();
+Runnable: When the thread is ready to run but waiting for CPU allocation.
+Code: t.start();
+Running: When the thread gets CPU time and starts execution.
+Waiting/Blocked: When a thread is waiting for resources or another thread to complete.
+Terminated: When a thread finishes its execution.
+
+Thread Methods:-
+Java provides several useful methods to control thread behavior:
+
+Method	        Description
+start() 	    Starts a thread and executes its run() method.
+run()	        Defines the task to be executed by the thread.
+sleep(ms)	    Puts the thread to sleep for the specified time.
+join()  	    Waits for the thread to finish its execution.
+isAlive()   	Checks if the thread is still running.
+setPriority()	Sets the priority of a thread (1 to 10, default 5).
+getPriority()	Returns the thread's priority.
+interrupt() 	Interrupts a sleeping or waiting thread.
+
+
+**************************************************************************************************
+Synchronization:-
+When multiple threads access shared resources, synchronization is required to maintain consistency.
+
+Why Synchronization?
+Without synchronization, threads can interfere with each other, causing race conditions or data corruption.
+
+Synchronized Block
+Limits the access of threads to a specific block of code:
+
+synchronized(object) {
+    // Code that only one thread can execute at a time
+}
+
+Synchronized Method
+Entire methods can be synchronized:
+java
+Copy code
+public synchronized void method() {
+    // Code that only one thread can execute at a time
+}
+
+Inter-thread Communication:-
+Java provides mechanisms like wait(), notify(), and notifyAll() for communication between threads. These methods must be called within synchronized blocks.
+
+Example: Producer-Consumer Problem
+
+class SharedResource {
+    private boolean available = false;
+
+    public synchronized void produce() throws InterruptedException {
+        while (available) {
+            wait(); // Wait until consumed
+        }
+        System.out.println("Produced item");
+        available = true;
+        notify(); // Notify consumer
+    }
+
+    public synchronized void consume() throws InterruptedException {
+        while (!available) {
+            wait(); // Wait until produced
+        }
+        System.out.println("Consumed item");
+        available = false;
+        notify(); // Notify producer
+    }
+}
+
+public class Example {
+    public static void main(String[] args) {
+        SharedResource resource = new SharedResource();
+
+        Thread producer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 5; i++) resource.produce();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread consumer = new Thread(() -> {
+            try {
+                for (int i = 0; i < 5; i++) resource.consume();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        producer.start();
+        consumer.start();
+    }
+}
+
+Thread Pools:-
+Creating and destroying threads repeatedly is inefficient. A thread pool is a group of pre-instantiated threads used to execute tasks.
+
+Benefits:
+Efficient Resource Utilization: Threads are reused, reducing overhead.
+Controlled Thread Creation: Prevents the system from being overwhelmed by too many threads.
+Example:
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadPoolExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2); // Pool of 2 threads
+
+        for (int i = 1; i <= 5; i++) {
+            int task = i;
+            executor.execute(() -> {
+                System.out.println("Task " + task + " is running by: " + Thread.currentThread().getName());
+            });
+        }
+
+        executor.shutdown(); // Shut down the pool
+    }
+}
